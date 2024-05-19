@@ -1,6 +1,5 @@
 ---
 marp: true
-theme: apc_confidential
 size: 16:9
 ---
 <!--
@@ -20,42 +19,10 @@ paginate: true
 
 # アジェンダ
 
-* Group紹介
 * インフラ自動化の次のフェーズ
 * この営みで重要なポイント
 * DEMO
 * 今後の展望
-
----
-
-<!--
-class: chapter
-paginate: false
--->
-
-# Group紹介
-
----
-
-<!--
-class: slide
-paginate: true
--->
-
-# NW自動化横串Teamの派生Group
-
-NW自動化横串Teamでは自分たちで好きな課題を立て、Groupに分かれて活動し成果を挙げるスタイルで活動しています。  
-私たちは「NW機器のconfigをCI/CDツールで扱ってみた」というテーマで、横串Tの中で集まりました。  
-メンバーは加入順に  
-
-* 小野志峰
-* 内田開偉
-* 北村晃司朗
-* 佐藤丞
-
-の4人です。
-
-本日はそこから私、小野志峰が説明します。
 
 ---
 
@@ -368,15 +335,8 @@ paginate: true
 # 今後の展望
 
 
-* iTOC事業部MBS部に来期新設する"NetDevOps"PJの推しサービスに昇華したい
 * GitLab + Gitlab Runnerでも同様の機能を実装し
 オンプレミスのみ導入可能な現場の需要も掴みたい
 * 主機能のrepoとConfig世代管理のrepoは分ける
 * SI方面での活用方法を模索
 
----
-
-<!--
-class: backcover
-paginate: true
--->
