@@ -1,0 +1,32 @@
+---
+name: test_arista
+run-name: test_arista
+on: [workflow_dispatch]
+jobs:
+
+  config_CICD:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/apc-nw-auto-cft/auto_check_config_project/ee:1.4
+      options: --user root
+    steps:
+
+      - name: Check my ip
+        run: curl http://inet-ip.info/
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Connectivity_check(develop)
+        uses: corrupt952/retry-command@v1.0.7
+        with:
+          command: "\
+          ansible-playbook -i project/inventory/arista_inventory.yml \
+          arista_test.yml"
+          max_attempts: 5
+          retry_interval: 5
+
+      - name: config change(develop)
+        run: "\
+          ansible-playbook -i project/inventory/arista_inventory.yml \
+          arista_test.yml"

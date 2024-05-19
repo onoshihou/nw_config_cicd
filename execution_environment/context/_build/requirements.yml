@@ -1,0 +1,4 @@
+collections:
+- junipernetworks.junos
+- community.general
+- arista.eos

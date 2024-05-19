@@ -1,0 +1,32 @@
+---
+- name: "compare_and_backup"
+  hosts: eos
+  gather_facts: false
+  vars:
+    path_to_backup: "{{ playbook_dir }}/../backup"
+
+  tasks:
+    ### 設定差分を取得する
+    - name: "Get configuration"
+      arista.eos.eos_command:
+        commands:
+          - command: "diff startup-config running-config"
+      register: res_compare
+
+    ### 設定差分を出力する
+    - name: "Debug show compare"
+      ansible.builtin.debug:
+        msg: "{{ res_compare.stdout_lines }}"
+
+    ### show running-configを取得する
+    - name: "Get configuration"
+      arista.eos.eos_command:
+        commands:
+          - command: "show running-config"
+      register: res_conf
+
+    ### show configurationをtxtに出力する
+    - name: "Create backup"
+      ansible.builtin.copy:
+        content: "{{ res_conf.stdout[0] }}"
+        dest: "{{ path_to_backup }}/{{ inventory_hostname }}"

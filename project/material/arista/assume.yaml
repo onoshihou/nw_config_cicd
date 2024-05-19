@@ -1,0 +1,27 @@
+---
+ceos01:
+  - command: "show ip route 3.3.3.3/32"
+    description: "追加対象のルーティング情報"
+    element: "vrfs.default.routes.{routes: keys(@)[0], interface: *.vias[].interface | [0], nexthop: *.vias[].nexthopAddr | [0]}"
+    result:
+      before:
+        routes: "0.0.0.0/0"
+        interface: "Management0"
+        nexthop: "172.20.20.1"
+      after:
+        routes: "3.3.3.3/32"
+        interface: "Vlan10"
+        nexthop: "192.168.0.2"
+ceos02:
+  - command: "show ip route 4.4.4.4/32"
+    description: "追加対象のルーティング情報"
+    element: "vrfs.default.routes.{routes: keys(@)[0], interface: *.vias[].interface | [0], nexthop: *.vias[].nexthopAddr | [0]}"
+    result:
+      before:
+        routes: "0.0.0.0/0"
+        interface: "Management0"
+        nexthop: "172.20.20.1"
+      after:
+        routes: "4.4.4.4/32"
+        interface: "Vlan10"
+        nexthop: "192.168.0.1"

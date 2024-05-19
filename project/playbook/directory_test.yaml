@@ -1,0 +1,27 @@
+---
+- name: "compare_and_backup"
+  hosts: localhost
+  gather_facts: false
+  vars:
+    path_to_backup: "{{ playbook_dir }}/../backup"
+
+  tasks:
+    - name: "exec command"
+      ansible.builtin.command:
+        argv:
+          - "pwd"
+          - "ll"
+          - "git status"
+          - "echo 'aaa' > test.txt"
+          - "ll"
+          - "cat test.txt"
+          - "git status"
+          - "git add test.txt"
+          - "git commit -m 'test commit'"
+          - "git push"
+      register: res
+
+    - name: debug res
+      ansible.builtin.debug:
+        msg: "{{ res }}"
+

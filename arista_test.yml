@@ -1,0 +1,14 @@
+---
+- hosts: eos
+  gather_facts: false
+
+  tasks:
+    - name: show version
+      arista.eos.eos_command:
+        commands: 
+          - command: show version
+      register: result
+
+    - name: Debug show
+      ansible.builtin.debug:
+        msg: "{{ result.stdout_lines[0] }}"

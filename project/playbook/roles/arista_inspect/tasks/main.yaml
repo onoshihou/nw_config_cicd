@@ -1,0 +1,62 @@
+---
+- name: "Debug show command"
+  ansible.builtin.debug:
+    msg: "{{ item.command }}"
+  loop: "{{ assume[inventory_hostname] }}"
+  loop_control:
+    label: " "
+  delegate_to: localhost
+
+- name: "Get show"
+  arista.eos.eos_command:
+    commands:
+      - command: "{{ item.command }}"
+        output: json
+  register: res_show
+  loop: "{{ assume[inventory_hostname] }}"
+  loop_control:
+    label: " "
+
+- name: "Get show"
+  arista.eos.eos_command:
+    commands:
+      - command: "{{ item.command }}"
+        output: text
+  register: res_text
+  loop: "{{ assume[inventory_hostname] }}"
+  loop_control:
+    label: " "
+    
+- name: "Debug show"
+  ansible.builtin.debug:
+    msg: "{{ res_text.results[0].stdout_lines }}"
+
+- name: "Debug working result"
+  ansible.builtin.debug:
+    msg:
+      - "ここでは {{ item.item.description }} を確認しています"
+      - "command: {{ item.item.command }}"
+      - "element: {{ item.item.element }}"
+      - "assume: {{ assumed_status }}"
+      - "actual: {{ actual_status }}"
+      - "想定と現状の一致: {{ (actual_status == assumed_status) | ternary('一致している', '一致していない') }}"
+  vars:
+    actual_status: "{{ item.stdout[0] | community.general.json_query(assume[inventory_hostname][0].element) }}"
+    assumed_status: "{{ item.item.result[inspect_before_or_after] }}"
+  loop: "{{ res_show.results }}"
+  loop_control:
+    label: " "
+
+- name: "Assert"
+  ansible.builtin.assert:
+    that:
+      - actual_status == assumed_status
+    quiet: true
+  vars:
+    actual_status: "{{ item.stdout[0] | community.general.json_query(assume[inventory_hostname][0].element) }}"
+    assumed_status: "{{ item.item.result[inspect_before_or_after] }}"
+  loop: "{{ res_show.results }}"
+  loop_control:
+    label: " "
+  when:
+    - item.item.result[inspect_before_or_after] != None

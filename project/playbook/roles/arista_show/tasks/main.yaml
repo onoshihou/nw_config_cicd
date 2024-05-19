@@ -1,0 +1,12 @@
+---
+- name: "Get show"
+  arista.eos.eos_command:
+    commands:
+      - command: "{{ item }}"
+        output: text
+  with_items: "{{ cmdlist }}"
+  register: result
+
+- name: "Debug show"
+  ansible.builtin.debug:
+    msg: "{{ result.results[0].stdout_lines }}"

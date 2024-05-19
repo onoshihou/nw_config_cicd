@@ -1,0 +1,10 @@
+---
+- hosts: eos
+  gather_facts: false
+  vars:
+    path_to_material: "{{ playbook_dir }}/../material"
+
+  tasks:
+    - name: "Get show"
+      ansible.builtin.import_role:
+        name: arista_show

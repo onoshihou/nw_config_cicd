@@ -1,0 +1,30 @@
+---
+- name: "compare_and_backup"
+  hosts: junos
+  gather_facts: false
+  vars:
+    path_to_backup: "{{ playbook_dir }}/../backup"
+
+  tasks:
+    ### 設定差分を取得する
+    - name: "Get compare"
+      junipernetworks.junos.junos_command:
+        commands: "show system rollback compare 0 1"
+      register: res_compare
+
+    ### 設定差分を出力する
+    - name: "Debug show compare"
+      ansible.builtin.debug:
+        msg: "{{ res_compare.stdout_lines }}"
+
+    ### show configurationを取得する
+    - name: "Get configuration"
+      junipernetworks.junos.junos_command:
+        commands: "show configuration"
+      register: res_conf
+
+    ### show configurationをtxtに出力する
+    - name: "Create backup"
+      ansible.builtin.copy:
+        content: "{{ res_conf.stdout[0] }}"
+        dest: "{{ path_to_backup }}/{{ inventory_hostname }}"

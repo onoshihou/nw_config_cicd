@@ -1,0 +1,20 @@
+name: directory_test
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on:
+  workflow_dispatch:
+
+jobs:
+  directory_test:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/apc-nw-auto-cft/auto_check_config_project/ee:1.2
+      options: --user root
+    steps:
+      - name: run playbook
+        run: pwd
+
+      - name: checkout code
+        uses: actions/checkout@v3
+
+      - name: run playbook
+        run: ansible-playbook project/playbook/directory_test.yaml

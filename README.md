@@ -1,1 +1,1 @@
-# nw_config_cicd
+# auto_check_config_project

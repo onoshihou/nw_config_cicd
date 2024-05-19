@@ -1,0 +1,4 @@
+---
+- name: "Change config"
+  arista.eos.eos_config:
+    src: "{{ path_to_material }}/arista/config/{{ inventory_hostname }}"

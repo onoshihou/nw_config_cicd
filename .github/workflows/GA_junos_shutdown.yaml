@@ -1,0 +1,71 @@
+---
+name: junos_shutdown
+run-name: ${{ github.actor }} is exec junos_shutdown
+on: [workflow_dispatch]
+jobs:
+  # check_my_ip:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Check my ip
+  #       run: curl http://inet-ip.info/
+
+  # approval:
+  #   runs-on: ubuntu-latest
+  #   environment:
+  #     name: test
+  #   steps:
+  #     - run: echo "waiting approval"
+
+  config_CICD:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/apc-nw-auto-cft/auto_check_config_project/ee:1.2
+      # credentials:
+      #   username: ${{ github.actor }}
+      #   password: ${{ secrets.GITHUB_TOKEN }}
+      options: --user root
+    steps:
+      # - uses: actions/checkout@v2
+      # - name: Login GitHub Packages
+      #   uses: docker/login-action@v1.13.0
+      #   with:
+      #     registry: ghcr.io
+      #     username: ${{ github.actor }}
+      #     password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check my ip
+        run: curl http://inet-ip.info/
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # - name: Sleep
+      #   run: sleep 60
+
+      - name: Connectivity_check(develop)
+        uses: corrupt952/retry-command@v1.0.7
+        with:
+          command: "\
+            ansible-playbook -i project/inventory/develop/inventory.yaml \
+            project/playbook/connectivity_check.yaml"
+          max_attempts: 5
+          retry_interval: 5
+
+      - name: Connectivity_check(production)
+        uses: corrupt952/retry-command@v1.0.7
+        with:
+          command: "\
+            ansible-playbook -i project/inventory/production/inventory.yaml \
+            project/playbook/connectivity_check.yaml"
+          max_attempts: 5
+          retry_interval: 5
+
+      - name: config change(develop)
+        run: "\
+          ansible-playbook -i project/inventory/develop/inventory.yaml \
+          project/playbook/junos_shutdown.yaml"
+
+      - name: config change(production)
+        run: "\
+          ansible-playbook -i project/inventory/production/inventory.yaml \
+          project/playbook/junos_shutdown.yaml"

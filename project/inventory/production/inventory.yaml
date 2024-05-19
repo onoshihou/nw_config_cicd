@@ -1,0 +1,44 @@
+---
+all:
+  children:
+    eos:
+      hosts:
+        ceos01:
+          ansible_host: 3.113.4.91 #都度変更
+          ansible_port: 2222
+        ceos02:
+          ansible_host: 3.113.4.91 #都度変更
+          ansible_port: 2223
+        # ceos03:
+        #   ansible_host: xxx.xxx.xxx.xxx #都度変更
+        #   ansible_port: 2224
+        # ceos04:
+        #   ansible_host: xxx.xxx.xxx.xxx #都度変更
+        #   ansible_port: 2225
+
+      vars:
+        ansible_network_os: arista.eos.eos
+        ansible_connection: ansible.netcommon.network_cli
+        ansible_user: admin
+        ansible_password: admin
+        ansible_become: true
+        ansible_become_method: enable
+    junos:
+      hosts:
+        vmx01:
+          ansible_host: 66.129.234.212
+          ansible_port: 32003
+        vmx02:
+          ansible_host: 66.129.234.212
+          ansible_port: 32006
+        vmx03:
+          ansible_host: 66.129.234.212
+          ansible_port: 32009
+        vmx04:
+          ansible_host: 66.129.234.212
+          ansible_port: 32012
+      vars:
+        ansible_network_os: junipernetworks.junos.junos
+        ansible_connection: ansible.netcommon.netconf
+        ansible_password: "Juniper!1"
+        ansible_user: "jcluser"

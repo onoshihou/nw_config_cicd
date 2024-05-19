@@ -1,0 +1,25 @@
+---
+all:
+  children:
+    eos:
+      hosts:
+        ceos01:
+          ansible_host: 52.195.12.138 #都度変更
+          ansible_port: 2222
+        # ceos02:
+        #   ansible_host: 52.195.232.89 #都度変更
+        #   ansible_port: 2223
+        # ceos03:
+        #   ansible_host: 52.195.232.89 #都度変更
+        #   ansible_port: 2224
+        # ceos04:
+        #   ansible_host: 52.195.232.89 #都度変更
+        #   ansible_port: 2225
+
+      vars:
+        ansible_network_os: arista.eos.eos
+        ansible_connection: ansible.netcommon.network_cli
+        ansible_user: admin
+        ansible_password: admin
+        ansible_become: true
+        ansible_become_method: enable

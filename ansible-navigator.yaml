@@ -1,0 +1,42 @@
+---
+ansible-navigator:
+
+  ansible:
+    config:
+      help: false
+      path: ./ansible.cfg
+    inventory:
+      help: false
+      entries:
+        - ./inventory
+    playbook:
+      help: false
+
+  # ansible-lint:
+  #   config: ~/ansible-lint.yaml
+  #   lintables: ~/myproject/
+
+  ansible-runner:
+    artifact-dir: ./artifact
+    rotate-artifacts-count: 10
+    timeout: 300
+    job-events: false
+
+  app: run
+
+  execution-environment:
+    container-engine: docker
+    enabled: true
+    image: ghcr.io/apc-nw-auto-cft/auto_check_config_project/ee:1.4
+    pull:
+      policy: missing
+      # arguments:
+      #   - "--tls-verify=false"
+      # policy: missing
+
+  playbook-artifact:
+    enable: false
+
+  mode: stdout
+
+  time-zone: Japan

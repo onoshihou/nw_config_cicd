@@ -1,0 +1,6 @@
+---
+cmdlist: 
+  # - show version
+  # - show run
+  - show ip route
+  

@@ -1,0 +1,40 @@
+---
+- hosts: eos
+  gather_facts: false
+  vars:
+    path_to_material: "{{ playbook_dir }}/../material"
+
+  tasks:
+    - name: "Include_vars assume"
+      ansible.builtin.include_vars:
+        file: "{{ path_to_material }}/arista/assume.yaml"
+        name: assume
+      delegate_to: localhost
+
+
+    - name: "Include_vars actual"
+      ansible.builtin.include_vars:
+        file: "{{ path_to_material }}/arista/get_show.json"
+        name: res_show
+      delegate_to: localhost
+
+    - name: "Debug show command"
+      ansible.builtin.debug:
+        msg: "{{ item.command }}"
+      loop: "{{ assume[inventory_hostname] }}"
+      loop_control:
+        label: " "
+      delegate_to: localhost
+
+    - name: "Debug show"
+      ansible.builtin.debug:
+        msg: "{{ res_show }}"
+
+    - name: "Debug show"
+      ansible.builtin.debug:
+        msg:
+        #   - "command: {{ item.item.command }}"
+        #   - "element: {{ item.item.element }}"
+        #   - "assume: {{ item.item.result[inspect_before_or_after] }}"
+          - "actual: {{ res_show | community.general.json_query(assume[inventory_hostname][0].element) }}"
+          - "before: {{ assume[inventory_hostname][0].result.before }}"

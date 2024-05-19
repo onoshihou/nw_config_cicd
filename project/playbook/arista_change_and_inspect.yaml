@@ -1,0 +1,34 @@
+---
+- hosts: eos
+  gather_facts: false
+  vars:
+    path_to_material: "{{ playbook_dir }}/../material"
+
+  tasks:
+    - name: "Include_vars assume"
+      ansible.builtin.include_vars:
+        file: "{{ path_to_material }}/arista/assume.yaml"
+        name: assume
+      delegate_to: localhost
+
+    - name: "Import inspect"
+      ansible.builtin.import_role:
+        name: arista_inspect
+      vars:
+        inspect_before_or_after: before
+        # inspect_show_target_hosts: "{{ expect.keys() }}"
+      # when:
+      #   - inventory_hostname in inspect_show_target_hosts
+
+    - name: "Change config"
+      ansible.builtin.import_role:
+        name: arista_change
+
+    - name: "Import inspect"
+      ansible.builtin.import_role:
+        name: arista_inspect
+      vars:
+        inspect_before_or_after: after
+        # inspect_show_target_hosts: "{{ expect.keys() }}"
+      # when:
+      #   - inventory_hostname in inspect_show_target_hosts

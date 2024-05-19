@@ -1,0 +1,45 @@
+! Command: show running-config
+! device: ceos2 (cEOSLab, EOS-4.28.8.1M-32996684.42881M (engineering build))
+!
+no aaa root
+!
+username admin privilege 15 role network-admin secret sha512 $6$badRskwZ8p.JUjdy$XlaBqD8Dhdt8sT3HGQFLniqXPV0P/NBvPH.L3pqicHs93bCeoj0NN0CKdZVP3e7KdoUT6PZ/cYpW0BiVQoR5i/
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname ceos2
+!
+spanning-tree mode mstp
+!
+vlan 10
+!
+management api http-commands
+   no shutdown
+!
+management api gnmi
+   transport grpc default
+!
+management api netconf
+   transport ssh default
+!
+interface Ethernet1
+   switchport access vlan 10
+!
+interface Management0
+   ip address 172.20.20.3/24
+   ipv6 address 2001:172:20:20::3/64
+!
+interface Vlan10
+   ip address 192.168.0.2/30
+!
+ip routing
+!
+ip route 0.0.0.0/0 172.20.20.1
+ip route 2.2.2.2/32 192.168.0.1
+ip route 4.4.4.4/32 192.168.0.1
+!
+ipv6 route ::/0 2001:172:20:20::1
+!
+end
